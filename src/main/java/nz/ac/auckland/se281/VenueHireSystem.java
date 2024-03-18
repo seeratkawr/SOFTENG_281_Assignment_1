@@ -11,13 +11,22 @@ public class VenueHireSystem {
   public VenueHireSystem() {}
 
   public void printVenues() {
+    String number = "";
     if (venues.isEmpty()) {
       MessageCli.NO_VENUES.printMessage();
+    } else if (venues.size() == 1) {
+      MessageCli.NUMBER_VENUES.printMessage("is", "one", "");
+    } else if((venues.size() >= 2) && (venues.size() < 10)) {
+      String[] numberWords = {"two", "three", "four", "five", "six", "seven", "eight", "nine"};
+      number = numberWords[venues.size() - 2];
+      MessageCli.NUMBER_VENUES.printMessage("are", number, "s");
+    } else if (venues.size() >= 10) {
+      number = String.valueOf(venues.size());
+      MessageCli.NUMBER_VENUES.printMessage("are", number, "s");
     }
   }
 
-  public void createVenue(
-      String venueName, String venueCode, String capacityInput, String hireFeeInput) {
+  public void createVenue(String venueName, String venueCode, String capacityInput, String hireFeeInput) {
     // TODO implement this method
   }
 
