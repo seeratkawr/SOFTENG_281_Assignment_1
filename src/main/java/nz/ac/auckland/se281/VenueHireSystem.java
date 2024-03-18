@@ -6,7 +6,10 @@ import nz.ac.auckland.se281.Types.FloralType;
 
 
 public class VenueHireSystem {
-  ArrayList<VenueHireSystem> venues = new ArrayList<>();
+  ArrayList<String> venues = new ArrayList<>();
+  ArrayList<String> venueCodes = new ArrayList<>();
+  ArrayList<String> venueCapacity = new ArrayList<>();
+  ArrayList<String> venueHireFee = new ArrayList<>();
   
   public VenueHireSystem() {}
 
@@ -27,7 +30,12 @@ public class VenueHireSystem {
   }
 
   public void createVenue(String venueName, String venueCode, String capacityInput, String hireFeeInput) {
-    // TODO implement this method
+    venues.add(venueName);
+    venueCodes.add(venueCode);
+    venueCapacity.add(capacityInput);
+    venueHireFee.add(hireFeeInput);
+
+    MessageCli.VENUE_SUCCESSFULLY_CREATED.printMessage(venueName, venueCode);
   }
 
   public void setSystemDate(String dateInput) {
