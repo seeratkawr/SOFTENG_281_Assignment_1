@@ -15,17 +15,32 @@ public class VenueHireSystem {
 
   public void printVenues() {
     String number = "";
-    if (venues.isEmpty()) {
-      MessageCli.NO_VENUES.printMessage();
-    } else if (venues.size() == 1) {
-      MessageCli.NUMBER_VENUES.printMessage("is", "one", "");
-    } else if((venues.size() >= 2) && (venues.size() < 10)) {
-      String[] numberWords = {"two", "three", "four", "five", "six", "seven", "eight", "nine"};
-      number = numberWords[venues.size() - 2];
-      MessageCli.NUMBER_VENUES.printMessage("are", number, "s");
-    } else if (venues.size() >= 10) {
-      number = String.valueOf(venues.size());
-      MessageCli.NUMBER_VENUES.printMessage("are", number, "s");
+    for (String venue : venues) {
+      for (String code : venueCodes) {
+        for (String capacity : venueCapacity) {
+          for (String hireFee : venueHireFee) {
+            if (venue.isEmpty()) {
+              MessageCli.NO_VENUES.printMessage();
+
+            } else if (venues.size() == 1) {
+              MessageCli.NUMBER_VENUES.printMessage("is", "one", "");
+              MessageCli.VENUE_ENTRY.printMessage(venue, code, capacity, hireFee);
+
+            } else if((venues.size() >= 2) && (venues.size() < 10)) {
+              String[] numberWords = {"two", "three", "four", "five", "six", "seven", "eight", "nine"};
+              number = numberWords[venues.size() - 2];
+              MessageCli.NUMBER_VENUES.printMessage("are", number, "s");
+              MessageCli.VENUE_ENTRY.printMessage(venue, code, capacity, hireFee);
+
+            } else if (venues.size() >= 10) {
+              number = String.valueOf(venues.size());
+              MessageCli.NUMBER_VENUES.printMessage("are", number, "s");
+              MessageCli.VENUE_ENTRY.printMessage(venue, code, capacity, hireFee);
+
+            }
+          }
+        }
+      }
     }
   }
 
