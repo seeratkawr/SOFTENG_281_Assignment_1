@@ -30,18 +30,31 @@ public class VenueHireSystem {
   }
 
   public void createVenue(String venueName, String venueCode, String capacityInput, String hireFeeInput) {
-    if (venueName.isEmpty()) {
+    if (venueName.trim().isEmpty()) {
       MessageCli.VENUE_NOT_CREATED_EMPTY_NAME.printMessage();
       return;
     }
     
     for (String code : venueCodes) {
       for (String venue : venues) {
-        if (venueCode == code) {
+        if (venueCode.equals(code)) {
           MessageCli.VENUE_NOT_CREATED_CODE_EXISTS.printMessage(venueCode, venue);
           return;
         }
       }
+    }
+
+    if (Integer.parseInt(capacityInput) < 0) {
+      MessageCli.VENUE_NOT_CREATED_INVALID_NUMBER.printMessage("capacity", " positive");
+      return;
+    } else if (Integer.parseInt(hireFeeInput) < 0) {
+      MessageCli.VENUE_NOT_CREATED_INVALID_NUMBER.printMessage("hire fee", " positive");
+      return;
+    }
+    
+    if (hireFeeInput.matches("[a-zA-Z]+")) {
+      MessageCli.VENUE_NOT_CREATED_INVALID_NUMBER.printMessage("hire fee", "");
+      return;
     }
 
     venues.add(venueName);
