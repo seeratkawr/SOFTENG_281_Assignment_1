@@ -59,13 +59,11 @@ public class VenueHireSystem {
     if (Integer.parseInt(capacityInput) < 0) {
       MessageCli.VENUE_NOT_CREATED_INVALID_NUMBER.printMessage("capacity", " positive");
       return;
+    } else if (hireFeeInput.matches("[a-zA-Z]+")) {
+      MessageCli.VENUE_NOT_CREATED_INVALID_NUMBER.printMessage("hire fee", "");
+      return;
     } else if (Integer.parseInt(hireFeeInput) < 0) {
       MessageCli.VENUE_NOT_CREATED_INVALID_NUMBER.printMessage("hire fee", " positive");
-      return;
-    }
-    
-    if (hireFeeInput.matches("[a-zA-Z]+")) {
-      MessageCli.VENUE_NOT_CREATED_INVALID_NUMBER.printMessage("hire fee", "");
       return;
     }
 
