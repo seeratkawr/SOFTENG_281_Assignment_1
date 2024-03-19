@@ -30,6 +30,20 @@ public class VenueHireSystem {
   }
 
   public void createVenue(String venueName, String venueCode, String capacityInput, String hireFeeInput) {
+    if (venueName.isEmpty()) {
+      MessageCli.VENUE_NOT_CREATED_EMPTY_NAME.printMessage();
+      return;
+    }
+    
+    for (String code : venueCodes) {
+      for (String venue : venues) {
+        if (venueCode == code) {
+          MessageCli.VENUE_NOT_CREATED_CODE_EXISTS.printMessage(venueCode, venue);
+          return;
+        }
+      }
+    }
+
     venues.add(venueName);
     venueCodes.add(venueCode);
     venueCapacity.add(capacityInput);
