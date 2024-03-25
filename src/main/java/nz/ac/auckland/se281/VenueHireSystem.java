@@ -67,6 +67,14 @@ public class VenueHireSystem {
       }
     }
 
+    //If capacity is a decimals
+    try {
+      Integer.parseInt(capacityInput);
+    } catch (NumberFormatException e) {
+       MessageCli.VENUE_NOT_CREATED_INVALID_NUMBER.printMessage("capacity", "");
+       return;
+    }
+
     //If the capacity input is a word
     if (capacityInput.matches("[a-zA-Z]+")) {
       MessageCli.VENUE_NOT_CREATED_INVALID_NUMBER.printMessage("capacity", "");
@@ -77,6 +85,14 @@ public class VenueHireSystem {
       return;
     } 
   
+    // If hire fee is a decimal
+    try {
+      Integer.parseInt(hireFeeInput);
+    } catch (NumberFormatException e) {
+       MessageCli.VENUE_NOT_CREATED_INVALID_NUMBER.printMessage("hire fee", "");
+       return;
+    }
+
     //If the hire fee input is a word
     if (hireFeeInput.matches("[a-zA-Z]+")) {
       MessageCli.VENUE_NOT_CREATED_INVALID_NUMBER.printMessage("hire fee", "");
