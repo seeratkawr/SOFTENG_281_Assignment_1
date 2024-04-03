@@ -1,6 +1,8 @@
 package nz.ac.auckland.se281;
 
 import java.util.ArrayList;
+import java.util.List;
+
 import nz.ac.auckland.se281.Types.CateringType;
 import nz.ac.auckland.se281.Types.FloralType;
 
@@ -11,10 +13,14 @@ public class VenueHireSystem {
   ArrayList<String> venueCodes = new ArrayList<>();
   ArrayList<String> venueCapacity = new ArrayList<>();
   ArrayList<String> venueHireFee = new ArrayList<>();
+  Bookings bookings;
 
+  
   String SystemDate = null;
   
-  public VenueHireSystem() {}
+  public VenueHireSystem() {
+    bookings = new Bookings();
+  }
 
   public void printVenues() {
     String number = ""; // initialised String to nothing
@@ -140,14 +146,20 @@ public class VenueHireSystem {
             MessageCli.BOOKING_NOT_MADE_PAST_DATE.printMessage(options[1], SystemDate);
             return;
           } else {
-            MessageCli.MAKE_BOOKING_SUCCESSFUL.printMessage(BookingReferenceGenerator.generateBookingReference(), venueNames.get(i), options[1], options[3]);
-            return;
+            List<String> bookedDates = bookings.getBookedDatesForVenue(venueCodes.get(i));
+            if (bookedDates.contains(options[1])) {
+              MessageCli.BOOKING_NOT_MADE_VENUE_ALREADY_BOOKED.printMessage(venueNames.get(i), options[1]);
+              return;
+            } else {
+              MessageCli.MAKE_BOOKING_SUCCESSFUL.printMessage(BookingReferenceGenerator.generateBookingReference(), venueNames.get(i), options[1], options[3]);
+              bookings.makeBooking(options);
+              return;
+            }
           }
         }
       }
       MessageCli.BOOKING_NOT_MADE_VENUE_NOT_FOUND.printMessage(options[1]);
       return;
-     
       
     }  
   }
