@@ -185,6 +185,13 @@ public class VenueHireSystem {
   public void printBookings(String venueCode) {
     if (!venueCodes.contains(venueCode)) {
       MessageCli.PRINT_BOOKINGS_VENUE_NOT_FOUND.printMessage(venueCode);
+    } else if (bookings.getBookedDatesForVenue(venueCode).isEmpty()) {
+      for (int i = 0; i < venueCodes.size(); i++) {
+        if (venueCode.equals(venueCodes.get(i))) {
+          MessageCli.PRINT_BOOKINGS_HEADER.printMessage(venueNames.get(i));
+          MessageCli.PRINT_BOOKINGS_NONE.printMessage(venueNames.get(i));
+        }
+      }
     }
   }
 
