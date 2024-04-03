@@ -53,10 +53,14 @@ public class VenueHireSystem {
       String capacity = venueCapacity.get(i);
       String hireFee = venueHireFee.get(i);
     
-      String nextAvailable = bookings.getNextAvailableDate(code, SystemDate);
+      if (SystemDate == null) {
+        MessageCli.VENUE_ENTRY.printMessage(venue, code, capacity, hireFee);
+      } else {
+        String nextAvailable = bookings.getNextAvailableDate(code, SystemDate);
     
-      // Prints the venues
-      MessageCli.VENUE_ENTRY.printMessage(venue, code, capacity, hireFee, nextAvailable); 
+        // Prints the venues
+        MessageCli.VENUE_ENTRY.printMessage(venue, code, capacity, hireFee, nextAvailable); 
+      }
     }
   }
 
