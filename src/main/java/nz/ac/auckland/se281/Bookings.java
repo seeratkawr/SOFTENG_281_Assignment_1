@@ -7,7 +7,6 @@ public class Bookings{
     private List<VenueBooking> venueBookings;
 
     public Bookings() {
-        super(); // Call the constructor of the superclass
         this.venueBookings = new ArrayList<>();
     }
 
@@ -15,13 +14,16 @@ public class Bookings{
       // Additional logic for tracking booked dates
       String venueCode = options[0];
       String bookingDate = options[1];
+      String customerEmail = options[2];
+      String attendees = options[3];
+      String bookingReference = options[4];
   
       VenueBooking booking = findVenueBooking(venueCode);
       if (booking != null) {
-          booking.addBookedDate(bookingDate);
+          booking.addBooking(bookingDate, customerEmail, attendees, bookingReference);
       } else {
           VenueBooking newBooking = new VenueBooking(venueCode);
-          newBooking.addBookedDate(bookingDate);
+          newBooking.addBooking(bookingDate, customerEmail, attendees, bookingReference);
           venueBookings.add(newBooking);
       }
   }
@@ -73,6 +75,20 @@ public class Bookings{
       return systemDate;
     }
 
+    public String[] getBookingReferenceForDate(String venueCode, String date) {
+      List<String> references = new ArrayList<>();
+      VenueBooking booking = findVenueBooking(venueCode);
+
+      if (booking != null) {
+        for (String bookedDate : booking.getBookedDates()) {
+          if (bookedDate.equals(date)) {
+            references.add(booking.getBookingReference(bookedDate));
+          }
+        }
+      }
+      return references.toArray(new String[0]);
+    }
+
     // Helper method to find VenueBooking object by venue code
     private VenueBooking findVenueBooking(String venueCode) {
         for (VenueBooking booking : venueBookings) {
@@ -87,22 +103,39 @@ public class Bookings{
     private class VenueBooking {
         private String venueCode;
         private List<String> bookedDates;
+        private List<String> customerEmails;
+        private List<String> attendees;
+        private List<String> bookingReferences;
 
         public VenueBooking(String venueCode) {
             this.venueCode = venueCode;
             this.bookedDates = new ArrayList<>();
+            this.customerEmails = new ArrayList<>();
+            this.attendees = new ArrayList<>();
+            this.bookingReferences = new ArrayList<>();
         }
 
         public String getVenueCode() {
             return venueCode;
         }
 
-        public void addBookedDate(String date) {
+        public void addBooking(String date, String customerEmail, String attendees, String bookingReference) {
             bookedDates.add(date);
+            customerEmails.add(customerEmail);
+            this.attendees.add(attendees);
+            bookingReferences.add(bookingReference);
         }
 
         public List<String> getBookedDates() {
             return bookedDates;
+        }
+
+        public String getBookingReference (String date) {
+          int index = bookedDates.indexOf(date);
+          if (index != -1 && index < bookingReferences.size()) {
+            return bookingReferences.get(index);
+          }
+          return null;
         }
     }
 

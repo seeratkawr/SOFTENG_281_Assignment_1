@@ -141,6 +141,7 @@ public class VenueHireSystem {
   }
 
   public void makeBooking(String[] options) {
+    String bookingReference = BookingReferenceGenerator.generateBookingReference();
     if (SystemDate == null) {
       MessageCli.BOOKING_NOT_MADE_DATE_NOT_SET.printMessage();
     } else if (venueNames.isEmpty()) {
@@ -156,8 +157,9 @@ public class VenueHireSystem {
 
           } else if (Integer.parseInt(options[3]) < minCapacity) {
             MessageCli.BOOKING_ATTENDEES_ADJUSTED.printMessage(options[3], String.valueOf(minCapacity), venueCapacity.get(i));
-            MessageCli.MAKE_BOOKING_SUCCESSFUL.printMessage(BookingReferenceGenerator.generateBookingReference(), venueNames.get(i), options[1], String.valueOf(minCapacity));
+            MessageCli.MAKE_BOOKING_SUCCESSFUL.printMessage(bookingReference, venueNames.get(i), options[1], String.valueOf(minCapacity));
             options[3] = String.valueOf(minCapacity);
+            options[4] = bookingReference;
             bookings.makeBooking(options);
 
           } else {
@@ -167,7 +169,8 @@ public class VenueHireSystem {
               return;
 
             } else {
-              MessageCli.MAKE_BOOKING_SUCCESSFUL.printMessage(BookingReferenceGenerator.generateBookingReference(), venueNames.get(i), options[1], options[3]);
+              MessageCli.MAKE_BOOKING_SUCCESSFUL.printMessage(bookingReference, venueNames.get(i), options[1], options[3]);
+              options[4] = bookingReference;
               bookings.makeBooking(options);
               return;
 
@@ -190,6 +193,13 @@ public class VenueHireSystem {
         if (venueCode.equals(venueCodes.get(i))) {
           MessageCli.PRINT_BOOKINGS_HEADER.printMessage(venueNames.get(i));
           MessageCli.PRINT_BOOKINGS_NONE.printMessage(venueNames.get(i));
+        }
+      }
+    } else {
+      for (int i = 0; i < venueCodes.size(); i++) {
+        if (venueCode.equals(venueCodes.get(i))) {
+          MessageCli.PRINT_BOOKINGS_HEADER.printMessage(venueNames.get(i));
+          for ()
         }
       }
     }
