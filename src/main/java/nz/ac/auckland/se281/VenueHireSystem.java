@@ -141,26 +141,37 @@ public class VenueHireSystem {
       MessageCli.BOOKING_NOT_MADE_NO_VENUES.printMessage();
     } else {
       for (int i = 0; i < venueCodes.size(); i++) {
+        int minCapacity = (int) (Integer.parseInt(venueCapacity.get(i)) * 0.25);
+
         if (options[0].equals(venueCodes.get(i))) {
           if (options[1].compareTo(SystemDate) < 0) {
             MessageCli.BOOKING_NOT_MADE_PAST_DATE.printMessage(options[1], SystemDate);
             return;
+
+          } else if (Integer.parseInt(options[3]) < minCapacity) {
+            MessageCli.BOOKING_ATTENDEES_ADJUSTED.printMessage(options[3], String.valueOf(minCapacity), venueCapacity.get(i));
+            MessageCli.MAKE_BOOKING_SUCCESSFUL.printMessage(BookingReferenceGenerator.generateBookingReference(), venueNames.get(i), options[1], String.valueOf(minCapacity));
+            bookings.makeBooking(options);
+
           } else {
             List<String> bookedDates = bookings.getBookedDatesForVenue(venueCodes.get(i));
             if (bookedDates.contains(options[1])) {
               MessageCli.BOOKING_NOT_MADE_VENUE_ALREADY_BOOKED.printMessage(venueNames.get(i), options[1]);
               return;
+
             } else {
               MessageCli.MAKE_BOOKING_SUCCESSFUL.printMessage(BookingReferenceGenerator.generateBookingReference(), venueNames.get(i), options[1], options[3]);
               bookings.makeBooking(options);
               return;
+
             }
           }
         }
       }
-      MessageCli.BOOKING_NOT_MADE_VENUE_NOT_FOUND.printMessage(options[1]);
-      return;
-      
+      if (!venueCodes.contains(options[0])) {
+        MessageCli.BOOKING_NOT_MADE_VENUE_NOT_FOUND.printMessage(options[0]);
+        return;
+      }
     }  
   }
 
