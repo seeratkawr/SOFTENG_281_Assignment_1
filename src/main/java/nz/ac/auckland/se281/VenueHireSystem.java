@@ -52,9 +52,11 @@ public class VenueHireSystem {
       String code = venueCodes.get(i);
       String capacity = venueCapacity.get(i);
       String hireFee = venueHireFee.get(i);
-
-      //Prints the venues
-      MessageCli.VENUE_ENTRY.printMessage(venue, code, capacity, hireFee); 
+    
+      String nextAvailable = bookings.getNextAvailableDate(code, SystemDate);
+    
+      // Prints the venues
+      MessageCli.VENUE_ENTRY.printMessage(venue, code, capacity, hireFee, nextAvailable); 
     }
   }
 
@@ -151,6 +153,7 @@ public class VenueHireSystem {
           } else if (Integer.parseInt(options[3]) < minCapacity) {
             MessageCli.BOOKING_ATTENDEES_ADJUSTED.printMessage(options[3], String.valueOf(minCapacity), venueCapacity.get(i));
             MessageCli.MAKE_BOOKING_SUCCESSFUL.printMessage(BookingReferenceGenerator.generateBookingReference(), venueNames.get(i), options[1], String.valueOf(minCapacity));
+            options[3] = String.valueOf(minCapacity);
             bookings.makeBooking(options);
 
           } else {
