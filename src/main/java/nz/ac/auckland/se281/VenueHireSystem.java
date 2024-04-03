@@ -183,7 +183,9 @@ public class VenueHireSystem {
   }
 
   public void printBookings(String venueCode) {
-    // TODO implement this method
+    if (!venueCodes.contains(venueCode)) {
+      MessageCli.PRINT_BOOKINGS_VENUE_NOT_FOUND.printMessage(venueCode);
+    }
   }
 
   public void addCateringService(String bookingReference, CateringType cateringType) {
