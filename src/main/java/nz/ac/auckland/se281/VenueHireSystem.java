@@ -133,7 +133,21 @@ public class VenueHireSystem {
       MessageCli.BOOKING_NOT_MADE_DATE_NOT_SET.printMessage();
     } else if (venueNames.isEmpty()) {
       MessageCli.BOOKING_NOT_MADE_NO_VENUES.printMessage();
-    }
+    } else {
+      for (int i = 0; i < venueCodes.size(); i++) {
+        if (options[0].equals(venueCodes.get(i))) {
+          if (options[1].compareTo(SystemDate) < 0) {
+            MessageCli.BOOKING_NOT_MADE_PAST_DATE.printMessage(options[1], SystemDate);
+            return;
+          } else {
+            MessageCli.MAKE_BOOKING_SUCCESSFUL.printMessage(BookingReferenceGenerator.generateBookingReference(), venueNames.get(i), options[1], options[3]);
+            return;
+          }
+        }
+      }
+        MessageCli.BOOKING_NOT_MADE_VENUE_NOT_FOUND.printMessage(options[1]);
+        return;
+    }  
   }
 
   public void printBookings(String venueCode) {
