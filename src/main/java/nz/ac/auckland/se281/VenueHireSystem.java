@@ -145,8 +145,10 @@ public class VenueHireSystem {
           }
         }
       }
-        MessageCli.BOOKING_NOT_MADE_VENUE_NOT_FOUND.printMessage(options[1]);
-        return;
+      MessageCli.BOOKING_NOT_MADE_VENUE_NOT_FOUND.printMessage(options[1]);
+      return;
+     
+      
     }  
   }
 
