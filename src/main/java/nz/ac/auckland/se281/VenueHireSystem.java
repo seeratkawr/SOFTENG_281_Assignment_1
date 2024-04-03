@@ -11,6 +11,8 @@ public class VenueHireSystem {
   ArrayList<String> venueCodes = new ArrayList<>();
   ArrayList<String> venueCapacity = new ArrayList<>();
   ArrayList<String> venueHireFee = new ArrayList<>();
+
+  String SystemDate = null;
   
   public VenueHireSystem() {}
 
@@ -114,15 +116,24 @@ public class VenueHireSystem {
   }
 
   public void setSystemDate(String dateInput) {
-    // TODO implement this method
+    SystemDate = dateInput;
+    MessageCli.DATE_SET.printMessage(dateInput);
   }
 
   public void printSystemDate() {
-    // TODO implement this method
+    if (SystemDate == null) {
+      MessageCli.CURRENT_DATE.printMessage("not set");
+    } else {
+      MessageCli.CURRENT_DATE.printMessage(SystemDate);
+    }
   }
 
   public void makeBooking(String[] options) {
-    // TODO implement this method
+    if (SystemDate == null) {
+      MessageCli.BOOKING_NOT_MADE_DATE_NOT_SET.printMessage();
+    } else if (venueNames.isEmpty()) {
+      MessageCli.BOOKING_NOT_MADE_NO_VENUES.printMessage();
+    }
   }
 
   public void printBookings(String venueCode) {
