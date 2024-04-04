@@ -15,7 +15,6 @@ public class VenueHireSystem {
   ArrayList<String> venueHireFee = new ArrayList<>();
   Bookings bookings;
 
-  
   String SystemDate = null;
   
   public VenueHireSystem() {
@@ -147,12 +146,13 @@ public class VenueHireSystem {
     } else if (venueNames.isEmpty()) {
       MessageCli.BOOKING_NOT_MADE_NO_VENUES.printMessage();
     } else {
-      String[] extendedOptions = new String[options.length +1];
+      String[] extendedOptions = new String[options.length + 2];
         extendedOptions[0] = options[0];
         extendedOptions[1] = options[1];
         extendedOptions[2] = options[2];
         extendedOptions[3] = options[3];
         extendedOptions[4] = bookingReference;
+        extendedOptions[5] = venueHireFee.get(venueCodes.indexOf(options[0]));
 
       for (int i = 0; i < venueCodes.size(); i++) {
         int minCapacity = (int) (Integer.parseInt(venueCapacity.get(i)) * 0.25);
@@ -244,6 +244,27 @@ public class VenueHireSystem {
   }
 
   public void viewInvoice(String bookingReference) {
-    // TODO implement this method
+    String[] invoiceContent = bookings.getInvoiceContent(bookingReference);
+
+    if (invoiceContent == null) {
+      MessageCli.VIEW_INVOICE_BOOKING_NOT_FOUND.printMessage(bookingReference);
+      return;
+    }
+      String bookingRef = invoiceContent[0];
+      String customerEmail = invoiceContent[1];
+      String bookingDate = invoiceContent[2];
+      String attendees = invoiceContent[3];
+      
+      String venueCode = invoiceContent[4];
+      String venueName = venueNames.get(venueCodes.indexOf(venueCode));
+      String hireFee = invoiceContent[5];
+      String cateringType = invoiceContent[6];
+      String cateringCost = invoiceContent[7];
+
+      MessageCli.INVOICE_CONTENT_TOP_HALF.printMessage (
+        bookingRef, customerEmail, bookingDate, attendees, venueName
+      );
+      MessageCli.INVOICE_CONTENT_VENUE_FEE.printMessage (hireFee);
+      MessageCli.INVOICE_CONTENT_CATERING_ENTRY.printMessage (cateringType, cateringCost);
   }
 }
