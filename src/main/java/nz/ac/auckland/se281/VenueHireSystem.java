@@ -147,6 +147,13 @@ public class VenueHireSystem {
     } else if (venueNames.isEmpty()) {
       MessageCli.BOOKING_NOT_MADE_NO_VENUES.printMessage();
     } else {
+      String[] extendedOptions = new String[options.length +1];
+        extendedOptions[0] = options[0];
+        extendedOptions[1] = options[1];
+        extendedOptions[2] = options[2];
+        extendedOptions[3] = options[3];
+        extendedOptions[4] = bookingReference;
+
       for (int i = 0; i < venueCodes.size(); i++) {
         int minCapacity = (int) (Integer.parseInt(venueCapacity.get(i)) * 0.25);
 
@@ -158,9 +165,8 @@ public class VenueHireSystem {
           } else if (Integer.parseInt(options[3]) < minCapacity) {
             MessageCli.BOOKING_ATTENDEES_ADJUSTED.printMessage(options[3], String.valueOf(minCapacity), venueCapacity.get(i));
             MessageCli.MAKE_BOOKING_SUCCESSFUL.printMessage(bookingReference, venueNames.get(i), options[1], String.valueOf(minCapacity));
-            options[3] = String.valueOf(minCapacity);
-            options[4] = bookingReference;
-            bookings.makeBooking(options);
+            extendedOptions[3] = String.valueOf(minCapacity);
+            bookings.makeBooking(extendedOptions);
 
           } else {
             List<String> bookedDates = bookings.getBookedDatesForVenue(venueCodes.get(i));
@@ -170,8 +176,7 @@ public class VenueHireSystem {
 
             } else {
               MessageCli.MAKE_BOOKING_SUCCESSFUL.printMessage(bookingReference, venueNames.get(i), options[1], options[3]);
-              options[4] = bookingReference;
-              bookings.makeBooking(options);
+              bookings.makeBooking(extendedOptions);
               return;
 
             }
@@ -188,18 +193,33 @@ public class VenueHireSystem {
   public void printBookings(String venueCode) {
     if (!venueCodes.contains(venueCode)) {
       MessageCli.PRINT_BOOKINGS_VENUE_NOT_FOUND.printMessage(venueCode);
-    } else if (bookings.getBookedDatesForVenue(venueCode).isEmpty()) {
-      for (int i = 0; i < venueCodes.size(); i++) {
-        if (venueCode.equals(venueCodes.get(i))) {
-          MessageCli.PRINT_BOOKINGS_HEADER.printMessage(venueNames.get(i));
-          MessageCli.PRINT_BOOKINGS_NONE.printMessage(venueNames.get(i));
-        }
+      return;
+    }
+
+    int venueIndex = -1;
+
+    for (int i = 0; i < venueCodes.size(); i++) {
+      if (venueCode.equals(venueCodes.get(i))) {
+        venueIndex = i;
+        break;
       }
+    }
+
+    List<String> bookedDates = bookings.getBookedDatesForVenue(venueCode);
+    if (bookedDates.isEmpty()) {
+      MessageCli.PRINT_BOOKINGS_HEADER.printMessage(venueNames.get(venueIndex));
+      MessageCli.PRINT_BOOKINGS_NONE.printMessage(venueNames.get(venueIndex));
+      return;
     } else {
-      for (int i = 0; i < venueCodes.size(); i++) {
-        if (venueCode.equals(venueCodes.get(i))) {
-          MessageCli.PRINT_BOOKINGS_HEADER.printMessage(venueNames.get(i));
-          for ()
+      MessageCli.PRINT_BOOKINGS_HEADER.printMessage(venueNames.get(venueIndex));
+      for (String date : bookedDates) {
+        String[] references = bookings.getBookingReferenceForDate(venueCode, date);
+        if (references.length > 0 && references != null) {
+          for (String reference : references) {
+            if (reference != null) {
+              MessageCli.PRINT_BOOKINGS_ENTRY.printMessage(reference, date);
+            }
+          }
         }
       }
     }

@@ -10,13 +10,13 @@ public class Bookings{
         this.venueBookings = new ArrayList<>();
     }
 
-    public void makeBooking(String[] options) {
+    public void makeBooking(String[] extendedOptions) {
       // Additional logic for tracking booked dates
-      String venueCode = options[0];
-      String bookingDate = options[1];
-      String customerEmail = options[2];
-      String attendees = options[3];
-      String bookingReference = options[4];
+      String venueCode = extendedOptions[0];
+      String bookingDate = extendedOptions[1];
+      String customerEmail = extendedOptions[2];
+      String attendees = extendedOptions[3];
+      String bookingReference = extendedOptions[4];
   
       VenueBooking booking = findVenueBooking(venueCode);
       if (booking != null) {
