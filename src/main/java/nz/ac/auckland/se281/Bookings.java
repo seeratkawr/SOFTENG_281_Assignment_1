@@ -5,88 +5,40 @@ import java.util.List;
 
 public class Bookings{
     private List<VenueBooking> venueBookings;
+    private BookingOperations bookingOperations;
 
     public Bookings() {
         this.venueBookings = new ArrayList<>();
+        this.bookingOperations = new BookingOperations();
     }
 
     public void makeBooking(String[] extendedOptions) {
-      // Additional logic for tracking booked dates
-      String venueCode = extendedOptions[0];
-      String bookingDate = extendedOptions[1];
-      String customerEmail = extendedOptions[2];
-      String attendees = extendedOptions[3];
-      String bookingReference = extendedOptions[4];
-  
+      bookingOperations.makeBooking(extendedOptions, venueBookings);
+    }
+
+    public List<String> getBookedDatesForVenue(String venueCode) {
       VenueBooking booking = findVenueBooking(venueCode);
       if (booking != null) {
-          booking.addBooking(bookingDate, customerEmail, attendees, bookingReference);
-      } else {
-          VenueBooking newBooking = new VenueBooking(venueCode);
-          newBooking.addBooking(bookingDate, customerEmail, attendees, bookingReference);
-          venueBookings.add(newBooking);
+        return booking.getBookedDates();
       }
-  }
-  
-
-    // Method to get booked dates for a venue
-    public List<String> getBookedDatesForVenue(String venueCode) {
-        VenueBooking booking = findVenueBooking(venueCode);
-        if (booking != null) {
-            return booking.getBookedDates();
-        }
-        return new ArrayList<>();
+      return new ArrayList<>();
     }
 
     public String getNextAvailableDate (String venueCode, String systemDate) {
       VenueBooking booking = findVenueBooking(venueCode);
 
       if (booking != null) {
-        List<String> bookedDates = booking.getBookedDates();
-        if (!bookedDates.isEmpty()) {
-          String lastBookingDate = bookedDates.get(bookedDates.size() - 1);
-
-          String[] dateParts = lastBookingDate.split("/");
-          int day = Integer.parseInt(dateParts[0]);
-          int month = Integer.parseInt(dateParts[1]);
-          int year = Integer.parseInt(dateParts[2]);
-
-          while (true) {
-            day++;
-
-            if (day > getDaysInMonth(month, year)) {
-              day = 1;
-              month++;
-
-              if (month > 12) {
-                month = 1;
-                year++;
-              }
-            }
-            String nextAvailable = String.format("%02d/%02d/%04d", day, month, year);
-
-            if (!bookedDates.contains(nextAvailable)) {
-              return nextAvailable;
-            }
-
-          }
-        }
+        return bookingOperations.getNextAvailableDate(booking, systemDate);
       }
       return systemDate;
     }
 
     public String[] getBookingReferenceForDate(String venueCode, String date) {
-      List<String> references = new ArrayList<>();
       VenueBooking booking = findVenueBooking(venueCode);
-
       if (booking != null) {
-        for (String bookedDate : booking.getBookedDates()) {
-          if (bookedDate.equals(date)) {
-            references.add(booking.getBookingReference(bookedDate));
-          }
-        }
+        return bookingOperations.getBookingReferenceForDate(booking, date);
       }
-      return references.toArray(new String[0]);
+      return new String[0];
     }
 
     // Helper method to find VenueBooking object by venue code
@@ -139,7 +91,78 @@ public class Bookings{
         }
     }
 
-    private int getDaysInMonth(int month, int year) {
+    private class BookingOperations {
+      public void makeBooking(String[] extendedOptions, List<VenueBooking> venueBookings) {
+        String venueCode = extendedOptions[0];
+        String bookingDate = extendedOptions[1];
+        String customerEmail = extendedOptions[2];
+        String attendees = extendedOptions[3];
+        String bookingReference = extendedOptions[4];
+
+        VenueBooking booking = findVenueBooking(venueCode, venueBookings);
+        if (booking != null) {
+          booking.addBooking(bookingDate, customerEmail, attendees, bookingReference);
+        } else {
+          VenueBooking newBooking = new VenueBooking(venueCode);
+          newBooking.addBooking(bookingDate, customerEmail, attendees, bookingReference);
+          venueBookings.add(newBooking);
+        }
+      }
+
+      public String getNextAvailableDate (VenueBooking booking, String systemDate) {
+        List<String> bookedDates = booking.getBookedDates();
+
+        if (!bookedDates.isEmpty()) {
+          String lastBookingDate = bookedDates.get(bookedDates.size() - 1);
+
+          String[] dateParts = lastBookingDate.split("/");
+          int day = Integer.parseInt(dateParts[0]);
+          int month = Integer.parseInt(dateParts[1]);
+          int year = Integer.parseInt(dateParts[2]);
+
+          while (true) {
+            day++;
+
+            if (day > getDaysInMonth(month, year)) {
+              day = 1;
+              month++;
+
+              if (month > 12) {
+                month = 1;
+                year++;
+              }
+            }
+            String nextAvailable = String.format("%02d/%02d/%04d", day, month, year);
+
+            if(!bookedDates.contains(nextAvailable)) {
+              return nextAvailable;
+            }
+          }
+        }
+        return systemDate;
+      }
+
+      public String[] getBookingReferenceForDate (VenueBooking booking, String date) {
+        List<String> references = new ArrayList<>();
+        
+        for (String bookedDate : booking.getBookedDates()) {
+          if (bookedDate.equals(date)) {
+            references.add(booking.getBookingReference(bookedDate));
+          }
+        }
+        return references.toArray(new String[0]);
+      }
+
+      private VenueBooking findVenueBooking(String venueCode, List<VenueBooking> venueBookings) {
+        for (VenueBooking booking : venueBookings) {
+          if (booking.getVenueCode().equals(venueCode)) {
+            return booking;
+          }
+        }
+        return null;
+      }
+
+      private int getDaysInMonth(int month, int year) {
         switch (month) {
             case 2:
                 return (year % 4 == 0 && (year % 100 != 0 || year % 400 == 0)) ? 29 : 28;
@@ -151,5 +174,6 @@ public class Bookings{
             default:
               return 31;
         }
+      }
     }
 }
