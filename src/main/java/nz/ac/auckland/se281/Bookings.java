@@ -41,6 +41,10 @@ public class Bookings{
       return new String[0];
     }
 
+    public VenueBooking getBooking(String bookingReference) {
+      return bookingOperations.getBooking(bookingReference);
+    }
+
     // Helper method to find VenueBooking object by venue code
     private VenueBooking findVenueBooking(String venueCode) {
         for (VenueBooking booking : venueBookings) {
@@ -174,6 +178,15 @@ public class Bookings{
             default:
               return 31;
         }
+      }
+
+      public VenueBooking getBooking(String bookingReference) {
+        for (VenueBooking booking : venueBookings) {
+          if (booking.getBookingReference(bookingReference).equals(bookingReference)) {
+            return booking;
+          }
+        }
+        return null;
       }
     }
 }
