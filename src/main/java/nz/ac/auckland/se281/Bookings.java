@@ -6,10 +6,12 @@ import java.util.List;
 public class Bookings{
     private List<VenueBooking> venueBookings;
     private BookingOperations bookingOperations;
+    private BookingServices bookingServices;
 
     public Bookings() {
         this.venueBookings = new ArrayList<>();
         this.bookingOperations = new BookingOperations();
+        this.bookingServices = new BookingServices();
     }
 
     public void makeBooking(String[] extendedOptions) {
@@ -43,6 +45,10 @@ public class Bookings{
 
     public VenueBooking getBooking(String bookingReference) {
       return bookingOperations.getBooking(bookingReference);
+    }
+
+    public void addServiceCatering (String bookingReference, Types.CateringType cateringType) {
+      bookingServices.addServiceCatering(bookingReference, cateringType);
     }
 
     // Helper method to find VenueBooking object by venue code
@@ -182,11 +188,28 @@ public class Bookings{
 
       public VenueBooking getBooking(String bookingReference) {
         for (VenueBooking booking : venueBookings) {
-          if (booking.getBookingReference(bookingReference).equals(bookingReference)) {
+          if (booking.bookingReferences.contains(bookingReference)) {
             return booking;
           }
         }
         return null;
+      }
+    }
+
+    private class BookingServices {
+
+      public void addServiceCatering (String bookingReference, Types.CateringType cateringType) {
+        VenueBooking booking = bookingOperations.getBooking(bookingReference);
+
+        List<String> cateringServices = new ArrayList<>();
+
+        if (booking != null) {
+          for (VenueBooking venueBooking : venueBookings) {
+            if (venueBooking.bookingReferences.contains(bookingReference)) {
+              cateringServices.add(cateringType.getName());
+            }
+          }
+        }
       }
     }
 }
