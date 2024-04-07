@@ -64,12 +64,12 @@ public class Bookings{
       bookingServices.addServiceMusic(bookingReference);
     }
 
-    public boolean getMusicService (String bookingReference) {
+    public String getMusicService (String bookingReference) {
       VenueBooking booking = bookingOperations.getBooking(bookingReference);
       if (booking != null) {
         return booking.getMusicService();
       }
-      return false;
+      return null;
     }
 
     public String getMusicPrice (String bookingReference) {
@@ -88,6 +88,7 @@ public class Bookings{
         invoiceContent[0] = booking.getCateringPrice();
         invoiceContent[1] = booking.getCateringType();
         invoiceContent[2] = booking.getVenueCode();
+        //invoiceContent[3] = booking.getMusicPrice();
 
         return invoiceContent;
       }
@@ -167,24 +168,16 @@ public class Bookings{
           return cateringPrice;
         }
 
-        public void setMusicService (String musicService) {
+        public void setMusicService(String musicService) {
           this.musicService = musicService;
         }
 
-        public boolean getMusicService () {
-          if (this.musicService == "Music") {
-            return true;
-          } else {
-            return false;
-          }
+        public String getMusicService () {
+          return musicService;
         }
 
         public void setMusicPrice (String musicPrice) {
-          if (this.musicService == "Music") {
-            this.musicPrice = "500";
-          } else {
-            this.musicPrice = "0";
-          }
+          this.musicPrice = musicPrice;
         }
 
         public String getMusicPrice () {
@@ -293,12 +286,8 @@ public class Bookings{
   private class BookingServices {
     List<VenueBooking> venueBookings;
     BookingOperations bookingOperations;
-    List<String> cateringServices = new ArrayList<>();
-    List<String> cateringPrices = new ArrayList<>();
 
     public BookingServices(List<VenueBooking> venueBookings, BookingOperations bookingOperations) {
-      this.cateringServices = new ArrayList<>();
-      this.cateringPrices = new ArrayList<>();
       this.venueBookings = venueBookings;
       this.bookingOperations = bookingOperations;
     }
@@ -319,7 +308,7 @@ public class Bookings{
       VenueBooking booking = bookingOperations.getBooking(bookingReference);
 
       if (booking != null) {
-        String musicService = "Music";
+        String musicService = "Y";
         int musicPrice = 500;
 
         booking.setMusicService(musicService);

@@ -251,17 +251,24 @@ public class VenueHireSystem {
 
   public void viewInvoice(String bookingReference) {
     String[] invoiceContent = bookings.InvoiceContent(bookingReference);
-
+    String musicPrice = "0";
+    
     if (bookings.getBooking(bookingReference) == null) {
       MessageCli.VIEW_INVOICE_BOOKING_NOT_FOUND.printMessage(bookingReference);
       return;
     } else {
-      String cateringPrice = bookings.getCateringPrice(bookingReference);
-      String cateringTypeName = bookings.getCateringService(bookingReference);
-      String musicPrice = bookings.getMusicPrice(bookingReference);
+      String cateringPrice = invoiceContent[0];
+      String cateringTypeName = invoiceContent[1];
+
+      if (bookings.getMusicService(bookingReference) == "Y") {
+        musicPrice = bookings.getMusicPrice(bookingReference);
+        MessageCli.INVOICE_CONTENT_MUSIC_ENTRY.printMessage(musicPrice);
+        return;
+      }
+
       String venueCode = invoiceContent[2];
       String venueFee = venueHireFee.get(venueCodes.indexOf(venueCode));
-      String totalPrice = String.valueOf(Integer.parseInt(venueFee) + Integer.parseInt(cateringPrice) + Integer.parseInt(musicPrice));
+      String totalPrice = String.valueOf(Integer.parseInt(venueFee) + Integer.parseInt(cateringPrice));
 
       MessageCli.INVOICE_CONTENT_CATERING_ENTRY.printMessage(cateringTypeName, cateringPrice);
       MessageCli.INVOICE_CONTENT_BOTTOM_HALF.printMessage(totalPrice);
