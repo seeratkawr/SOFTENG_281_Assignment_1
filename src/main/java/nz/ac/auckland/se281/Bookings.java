@@ -79,6 +79,26 @@ public class Bookings{
       }
       return null;
     }
+
+    public void addServiceFloral (String bookingReference, Types.FloralType floralType) {
+      bookingServices.addServiceFloral(bookingReference, floralType);
+    }
+
+    public String getFloralType (String bookingReference) {
+      VenueBooking booking = bookingOperations.getBooking(bookingReference);
+      if (booking != null) {
+        return booking.getFloralType();
+      }
+      return null;
+    }
+
+    public String getFloralPrice (String bookingReference) {
+      VenueBooking booking = bookingOperations.getBooking(bookingReference);
+      if (booking != null) {
+        return booking.getFloralPrice();
+      }
+      return null;
+    }
     
     public String[] InvoiceContent(String bookingReference) {
       VenueBooking booking = bookingOperations.getBooking(bookingReference);
@@ -88,7 +108,7 @@ public class Bookings{
         invoiceContent[0] = booking.getCateringPrice();
         invoiceContent[1] = booking.getCateringType();
         invoiceContent[2] = booking.getVenueCode();
-        //invoiceContent[3] = booking.getMusicPrice();
+        invoiceContent[3] = booking.getMusicPrice();
 
         return invoiceContent;
       }
@@ -116,6 +136,8 @@ public class Bookings{
         private String cateringPrice;
         private String musicService;
         private String musicPrice;
+        private String floralService;
+        private String floralPrice;
 
         public VenueBooking(String venueCode) {
             this.venueCode = venueCode;
@@ -127,6 +149,8 @@ public class Bookings{
             this.cateringPrice = "";
             this.musicService = "";
             this.musicPrice = "";
+            this.floralService = "";
+            this.floralPrice = "";
         }
 
         public String getVenueCode() {
@@ -182,6 +206,22 @@ public class Bookings{
 
         public String getMusicPrice () {
           return musicPrice;
+        }
+
+        public void setFloralType (String floralType) {
+          this.floralService = floralType;
+        }
+
+        public String getFloralType () {
+          return floralService;
+        }
+
+        public void setFloralPrice (String floralPrice) {
+          this.floralPrice = floralPrice;
+        }
+
+        public String getFloralPrice () {
+          return floralPrice;
         }
     }
     private class BookingOperations {
@@ -313,6 +353,18 @@ public class Bookings{
 
         booking.setMusicService(musicService);
         booking.setMusicPrice(String.valueOf(musicPrice));
+      }
+    }
+
+    public void addServiceFloral (String bookingReference, Types.FloralType floralType) {
+      VenueBooking booking = bookingOperations.getBooking(bookingReference);
+
+      if(booking != null) {
+        String floralService = floralType.getName();
+        int floralPrice = floralType.getCost();
+
+        booking.setFloralType(floralService);
+        booking.setFloralPrice(String.valueOf(floralPrice));
       }
     }
   }
