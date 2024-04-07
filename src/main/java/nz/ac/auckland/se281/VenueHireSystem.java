@@ -258,26 +258,42 @@ public class VenueHireSystem {
   public void viewInvoice(String bookingReference) {
     String[] invoiceContent = bookings.InvoiceContent(bookingReference);
     String musicPrice = "0";
+    String cateringPrice = "0";
+    String cateringTypeName = "";
+    String floralPrice = "0";
+    String floralTypeName = "";
+    int totalPrice = 0;
     
     if (bookings.getBooking(bookingReference) == null) {
       MessageCli.VIEW_INVOICE_BOOKING_NOT_FOUND.printMessage(bookingReference);
       return;
     } else {
-      String cateringPrice = invoiceContent[0];
-      String cateringTypeName = invoiceContent[1];
-
-      if (bookings.getMusicService(bookingReference) == "Y") {
-        musicPrice = invoiceContent[3];
-        MessageCli.INVOICE_CONTENT_MUSIC_ENTRY.printMessage(musicPrice);
-        return;
-      }
-
       String venueCode = invoiceContent[2];
       String venueFee = venueHireFee.get(venueCodes.indexOf(venueCode));
-      String totalPrice = String.valueOf(Integer.parseInt(venueFee) + Integer.parseInt(cateringPrice));
+      totalPrice += Integer.parseInt(venueFee);
 
-      MessageCli.INVOICE_CONTENT_CATERING_ENTRY.printMessage(cateringTypeName, cateringPrice);
-      MessageCli.INVOICE_CONTENT_BOTTOM_HALF.printMessage(totalPrice);
+      if (bookings.getCateringService(bookingReference) != null) {
+        cateringPrice = invoiceContent[0];
+        cateringTypeName = invoiceContent[1];
+        MessageCli.INVOICE_CONTENT_CATERING_ENTRY.printMessage(cateringTypeName, cateringPrice);
+        totalPrice += Integer.parseInt(cateringPrice);
+      }
+
+      if (bookings.getMusicService(bookingReference) != null) {
+        musicPrice = invoiceContent[3];
+        MessageCli.INVOICE_CONTENT_MUSIC_ENTRY.printMessage(musicPrice);
+        totalPrice += Integer.parseInt(musicPrice);
+      }
+
+      if (bookings.getFloralService(bookingReference) != null) {
+        floralPrice = invoiceContent[4];
+        floralTypeName = invoiceContent[5];
+        MessageCli.INVOICE_CONTENT_FLORAL_ENTRY.printMessage(floralTypeName, floralPrice);
+        totalPrice += Integer.parseInt(floralPrice);
+      }
+
+      String total = String.valueOf(totalPrice);
+      MessageCli.INVOICE_CONTENT_BOTTOM_HALF.printMessage(total);
     }
 }
 

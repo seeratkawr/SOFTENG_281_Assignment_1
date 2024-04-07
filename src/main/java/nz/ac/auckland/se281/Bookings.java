@@ -47,7 +47,7 @@ public class Bookings{
     public String getCateringService (String bookingReference) {
       VenueBooking booking = bookingOperations.getBooking(bookingReference);
       if (booking != null) {
-        return booking.getCateringType();
+        return booking.getCateringService();
       }
       return null;
     }
@@ -84,10 +84,10 @@ public class Bookings{
       bookingServices.addServiceFloral(bookingReference, floralType);
     }
 
-    public String getFloralType (String bookingReference) {
+    public String getFloralService (String bookingReference) {
       VenueBooking booking = bookingOperations.getBooking(bookingReference);
       if (booking != null) {
-        return booking.getFloralType();
+        return booking.getFloralService();
       }
       return null;
     }
@@ -104,11 +104,13 @@ public class Bookings{
       VenueBooking booking = bookingOperations.getBooking(bookingReference);
 
       if (booking != null) {
-        String[] invoiceContent = new String[5];
+        String[] invoiceContent = new String[6];
         invoiceContent[0] = booking.getCateringPrice();
-        invoiceContent[1] = booking.getCateringType();
+        invoiceContent[1] = booking.getCateringService();
         invoiceContent[2] = booking.getVenueCode();
         invoiceContent[3] = booking.getMusicPrice();
+        invoiceContent[4] = booking.getFloralPrice();
+        invoiceContent[5] = booking.getFloralService();
 
         return invoiceContent;
       }
@@ -145,12 +147,12 @@ public class Bookings{
             this.customerEmails = new ArrayList<>();
             this.attendees = new ArrayList<>();
             this.bookingReferences = new ArrayList<>();
-            this.cateringService = "";
-            this.cateringPrice = "";
-            this.musicService = "";
-            this.musicPrice = "";
-            this.floralService = "";
-            this.floralPrice = "";
+            this.cateringService = null;
+            this.cateringPrice = null;
+            this.musicService = null;
+            this.musicPrice = null;
+            this.floralService = null;
+            this.floralPrice = null;
         }
 
         public String getVenueCode() {
@@ -180,7 +182,7 @@ public class Bookings{
           this.cateringService = cateringType;
         }
 
-        public String getCateringType () {
+        public String getCateringService () {
           return cateringService;
         }
 
@@ -212,7 +214,7 @@ public class Bookings{
           this.floralService = floralType;
         }
 
-        public String getFloralType () {
+        public String getFloralService () {
           return floralService;
         }
 
@@ -324,6 +326,7 @@ public class Bookings{
   }
 
   private class BookingServices {
+    @SuppressWarnings("unused")
     List<VenueBooking> venueBookings;
     BookingOperations bookingOperations;
 
