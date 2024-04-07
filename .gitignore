@@ -2,7 +2,7 @@
 # Edit at https://www.toptal.com/developers/gitignore?templates=java,maven,visualstudiocode,eclipse,intellij,macos,linux,windows,git
 
 target/
-codestyle.config
+#codestyle.config
 
 ### Eclipse ###
 .metadata
