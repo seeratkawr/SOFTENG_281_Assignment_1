@@ -236,7 +236,13 @@ public class VenueHireSystem {
   }
 
   public void addServiceMusic(String bookingReference) {
-    // TODO implement this method
+    if (bookings.getBooking(bookingReference) == null) {
+      MessageCli.SERVICE_NOT_ADDED_BOOKING_NOT_FOUND.printMessage("Music", bookingReference);
+      return;
+    } else {
+      MessageCli.ADD_SERVICE_SUCCESSFUL.printMessage("Music", bookingReference);
+      bookings.addServiceMusic(bookingReference);
+    }
   }
 
   public void addServiceFloral(String bookingReference, FloralType floralType) {
@@ -252,10 +258,11 @@ public class VenueHireSystem {
     } else {
       String cateringPrice = bookings.getCateringPrice(bookingReference);
       String cateringTypeName = bookings.getCateringService(bookingReference);
+      String musicPrice = bookings.getMusicPrice(bookingReference);
       String venueCode = invoiceContent[2];
       String venueFee = venueHireFee.get(venueCodes.indexOf(venueCode));
-      String totalPrice = String.valueOf(Integer.parseInt(cateringPrice) + Integer.parseInt(venueFee));
-      
+      String totalPrice = String.valueOf(Integer.parseInt(venueFee) + Integer.parseInt(cateringPrice) + Integer.parseInt(musicPrice));
+
       MessageCli.INVOICE_CONTENT_CATERING_ENTRY.printMessage(cateringTypeName, cateringPrice);
       MessageCli.INVOICE_CONTENT_BOTTOM_HALF.printMessage(totalPrice);
     }

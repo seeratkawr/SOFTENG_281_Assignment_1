@@ -59,6 +59,26 @@ public class Bookings{
       }
       return null;
     }
+
+    public void addServiceMusic (String bookingReference) {
+      bookingServices.addServiceMusic(bookingReference);
+    }
+
+    public boolean getMusicService (String bookingReference) {
+      VenueBooking booking = bookingOperations.getBooking(bookingReference);
+      if (booking != null) {
+        return booking.getMusicService();
+      }
+      return false;
+    }
+
+    public String getMusicPrice (String bookingReference) {
+      VenueBooking booking = bookingOperations.getBooking(bookingReference);
+      if (booking != null) {
+        return booking.getMusicPrice();
+      }
+      return null;
+    }
     
     public String[] InvoiceContent(String bookingReference) {
       VenueBooking booking = bookingOperations.getBooking(bookingReference);
@@ -93,6 +113,8 @@ public class Bookings{
         private List<String> bookingReferences;
         private String cateringService;
         private String cateringPrice;
+        private String musicService;
+        private String musicPrice;
 
         public VenueBooking(String venueCode) {
             this.venueCode = venueCode;
@@ -102,6 +124,8 @@ public class Bookings{
             this.bookingReferences = new ArrayList<>();
             this.cateringService = "";
             this.cateringPrice = "";
+            this.musicService = "";
+            this.musicPrice = "";
         }
 
         public String getVenueCode() {
@@ -141,6 +165,30 @@ public class Bookings{
 
         public String getCateringPrice () {
           return cateringPrice;
+        }
+
+        public void setMusicService (String musicService) {
+          this.musicService = musicService;
+        }
+
+        public boolean getMusicService () {
+          if (this.musicService == "Music") {
+            return true;
+          } else {
+            return false;
+          }
+        }
+
+        public void setMusicPrice (String musicPrice) {
+          if (this.musicService == "Music") {
+            this.musicPrice = "500";
+          } else {
+            this.musicPrice = "0";
+          }
+        }
+
+        public String getMusicPrice () {
+          return musicPrice;
         }
     }
     private class BookingOperations {
@@ -261,8 +309,21 @@ public class Bookings{
       if (booking != null) {
         String cateringService = cateringType.getName();
         int cateringPrice = cateringType.getCostPerPerson() * Integer.parseInt(booking.attendees.get(booking.bookingReferences.indexOf(bookingReference)));
+
         booking.setCateringType(cateringService);
         booking.setCateringPrice(String.valueOf(cateringPrice));
+      }
+    }
+
+    public void addServiceMusic (String bookingReference) {
+      VenueBooking booking = bookingOperations.getBooking(bookingReference);
+
+      if (booking != null) {
+        String musicService = "Music";
+        int musicPrice = 500;
+
+        booking.setMusicService(musicService);
+        booking.setMusicPrice(String.valueOf(musicPrice));
       }
     }
   }
