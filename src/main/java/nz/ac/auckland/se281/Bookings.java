@@ -1,8 +1,6 @@
 package nz.ac.auckland.se281;
-
 import java.util.ArrayList;
 import java.util.List;
-
 public class Bookings{
     private List<VenueBooking> venueBookings;
     private BookingOperations bookingOperations;
@@ -11,13 +9,12 @@ public class Bookings{
     public Bookings() {
         this.venueBookings = new ArrayList<>();
         this.bookingOperations = new BookingOperations();
-        this.bookingServices = new BookingServices();
+        this.bookingServices = new BookingServices(this.venueBookings, this.bookingOperations);
     }
 
     public void makeBooking(String[] extendedOptions) {
       bookingOperations.makeBooking(extendedOptions, venueBookings);
     }
-
     public List<String> getBookedDatesForVenue(String venueCode) {
       VenueBooking booking = findVenueBooking(venueCode);
       if (booking != null) {
@@ -25,16 +22,13 @@ public class Bookings{
       }
       return new ArrayList<>();
     }
-
     public String getNextAvailableDate (String venueCode, String systemDate) {
       VenueBooking booking = findVenueBooking(venueCode);
-
       if (booking != null) {
         return bookingOperations.getNextAvailableDate(booking, systemDate);
       }
       return systemDate;
     }
-
     public String[] getBookingReferenceForDate(String venueCode, String date) {
       VenueBooking booking = findVenueBooking(venueCode);
       if (booking != null) {
@@ -42,7 +36,6 @@ public class Bookings{
       }
       return new String[0];
     }
-
     public VenueBooking getBooking(String bookingReference) {
       return bookingOperations.getBooking(bookingReference);
     }
@@ -51,9 +44,22 @@ public class Bookings{
       bookingServices.addServiceCatering(bookingReference, cateringType);
     }
 
-    public int totalPrice (String bookingReference) {
-      return bookingServices.totalPrice(bookingReference);
+    public String getCateringService (String bookingReference) {
+      VenueBooking booking = bookingOperations.getBooking(bookingReference);
+      if (booking != null) {
+        return booking.getCateringType();
+      }
+      return null;
     }
+
+    public String getCateringPrice (String bookingReference) {
+      VenueBooking booking = bookingOperations.getBooking(bookingReference);
+      if (booking != null) {
+        return booking.getCateringPrice();
+      }
+      return null;
+    }
+    
 
     // Helper method to find VenueBooking object by venue code
     private VenueBooking findVenueBooking(String venueCode) {
@@ -64,45 +70,35 @@ public class Bookings{
         }
         return null;
     }
-
     // Inner class representing bookings for a specific venue
     private class VenueBooking {
-      private String venueCode;
-      private List<String> bookedDates;
-      private List<String> customerEmails;
-      private String attendees;
-      private List<String> bookingReferences;
-      private String hireFee;
-      private Types.CateringType cateringType;
-  
-      public VenueBooking(String venueCode) {
-          this.venueCode = venueCode;
-          this.bookedDates = new ArrayList<>();
-          this.customerEmails = new ArrayList<>();
-          this.attendees = new String();
-          this.bookingReferences = new ArrayList<>();
-          this.hireFee = new String();
-          this.cateringType = null;
-      }
-  
-      public String getVenueCode() {
-          return venueCode;
-      }
-  
-      public String getAttendees() {
-          return attendees;
-      }
-  
-      public Types.CateringType getCateringType() {
-          return cateringType;
-      }
+        private String venueCode;
+        private List<String> bookedDates;
+        private List<String> customerEmails;
+        private List<String> attendees;
+        private List<String> bookingReferences;
+        private String cateringService;
+        private String cateringPrice;
 
-        public void addBooking(String date, String customerEmail, String attendees, String bookingReference, String hireFee, Types.CateringType cateringType) {
+        public VenueBooking(String venueCode) {
+            this.venueCode = venueCode;
+            this.bookedDates = new ArrayList<>();
+            this.customerEmails = new ArrayList<>();
+            this.attendees = new ArrayList<>();
+            this.bookingReferences = new ArrayList<>();
+            this.cateringService = "";
+            this.cateringPrice = "";
+        }
+
+        public String getVenueCode() {
+            return venueCode;
+        }
+
+        public void addBooking(String date, String customerEmail, String attendees, String bookingReference) {
             bookedDates.add(date);
             customerEmails.add(customerEmail);
-            this.attendees = attendees;
+            this.attendees.add(attendees);
             bookingReferences.add(bookingReference);
-            this.cateringType = cateringType;
         }
 
         public List<String> getBookedDates() {
@@ -116,8 +112,23 @@ public class Bookings{
           }
           return null;
         }
-    }
 
+        public void setCateringType (String cateringType) {
+          this.cateringService = cateringType;
+        }
+
+        public String getCateringType () {
+          return cateringService;
+        }
+
+        public void setCateringPrice (String cateringPrice) {
+          this.cateringPrice = cateringPrice;
+        }
+
+        public String getCateringPrice () {
+          return cateringPrice;
+        }
+    }
     private class BookingOperations {
       public void makeBooking(String[] extendedOptions, List<VenueBooking> venueBookings) {
         String venueCode = extendedOptions[0];
@@ -125,15 +136,14 @@ public class Bookings{
         String customerEmail = extendedOptions[2];
         String attendees = extendedOptions[3];
         String bookingReference = extendedOptions[4];
-        String hireFee = extendedOptions[5];
-        Types.CateringType cateringType = null;
 
         VenueBooking booking = findVenueBooking(venueCode, venueBookings);
+
         if (booking != null) {
-          booking.addBooking(bookingDate, customerEmail, attendees, bookingReference, hireFee, cateringType);
+          booking.addBooking(bookingDate, customerEmail, attendees, bookingReference);
         } else {
           VenueBooking newBooking = new VenueBooking(venueCode);
-          newBooking.addBooking(bookingDate, customerEmail, attendees, bookingReference, hireFee, cateringType);
+          newBooking.addBooking(bookingDate, customerEmail, attendees, bookingReference);
           venueBookings.add(newBooking);
         }
       }
@@ -143,8 +153,8 @@ public class Bookings{
 
         if (!bookedDates.isEmpty()) {
           String lastBookingDate = bookedDates.get(bookedDates.size() - 1);
-
           String[] dateParts = lastBookingDate.split("/");
+
           int day = Integer.parseInt(dateParts[0]);
           int month = Integer.parseInt(dateParts[1]);
           int year = Integer.parseInt(dateParts[2]);
@@ -155,17 +165,18 @@ public class Bookings{
             if (day > getDaysInMonth(month, year)) {
               day = 1;
               month++;
-
               if (month > 12) {
                 month = 1;
                 year++;
               }
             }
+
             String nextAvailable = String.format("%02d/%02d/%04d", day, month, year);
 
             if(!bookedDates.contains(nextAvailable)) {
               return nextAvailable;
             }
+
           }
         }
         return systemDate;
@@ -179,6 +190,7 @@ public class Bookings{
             references.add(booking.getBookingReference(bookedDate));
           }
         }
+
         return references.toArray(new String[0]);
       }
 
@@ -188,9 +200,10 @@ public class Bookings{
             return booking;
           }
         }
+
         return null;
       }
-
+      
       private int getDaysInMonth(int month, int year) {
         switch (month) {
             case 2:
@@ -211,60 +224,32 @@ public class Bookings{
             return booking;
           }
         }
-        return null;
-      }
+      return null;
+    }
+  }
 
-      
+  private class BookingServices {
+    List<VenueBooking> venueBookings;
+    BookingOperations bookingOperations;
+    List<String> cateringServices = new ArrayList<>();
+    List<String> cateringPrices = new ArrayList<>();
+
+    public BookingServices(List<VenueBooking> venueBookings, BookingOperations bookingOperations) {
+      this.cateringServices = new ArrayList<>();
+      this.cateringPrices = new ArrayList<>();
+      this.venueBookings = venueBookings;
+      this.bookingOperations = bookingOperations;
     }
 
-    private class BookingServices {
-      public void addServiceCatering (String bookingReference, Types.CateringType cateringType) {
-        VenueBooking booking = bookingOperations.getBooking(bookingReference);
-
-        if (booking != null) {
-          booking.cateringType = cateringType;
-        }
-      }
-
-      public int totalPrice(String bookingReference) {
-        VenueBooking booking = bookingOperations.getBooking(bookingReference);
-    
-        if (booking != null) {
-            int cateringCost = booking.getCateringType().getCostPerPerson() * Integer.parseInt(booking.getAttendees());
-            int venueHireFee = Integer.parseInt(booking.hireFee);
-            int totalPrice = cateringCost + venueHireFee;
-            return totalPrice;
-        }
-        
-        return 0;
-    }
-    
-    }
-
-    public String[] getInvoiceContent(String bookingReference) {
+    public void addServiceCatering (String bookingReference, Types.CateringType cateringType) {
       VenueBooking booking = bookingOperations.getBooking(bookingReference);
-    
+
       if (booking != null) {
-        String[] invoiceContent = new String[8];
-        invoiceContent[0] = bookingReference;
-        
-        // Ensure bookedDates list is not empty before accessing the first element
-        if (!booking.bookedDates.isEmpty()) {
-          invoiceContent[2] = booking.bookedDates.get(0);
-        }
-        invoiceContent[3] = booking.attendees;
-        invoiceContent[4] = booking.venueCode;
-        invoiceContent[5] = booking.hireFee;
-    
-        if (booking.cateringType != null) {
-          invoiceContent[6] = booking.cateringType.getName();
-          int cateringCost = bookingServices.totalPrice(bookingReference) - Integer.parseInt(booking.hireFee);
-          invoiceContent[7] = String.valueOf(cateringCost);
-        }
-    
-        return invoiceContent;
+        String cateringService = cateringType.getName();
+        int cateringPrice = cateringType.getCostPerPerson() * Integer.parseInt(booking.attendees.get(booking.bookingReferences.indexOf(bookingReference)));
+        booking.setCateringType(cateringService);
+        booking.setCateringPrice(String.valueOf(cateringPrice));
       }
-      return new String[0];
     }
-    
+  }
 }
