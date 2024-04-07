@@ -60,6 +60,20 @@ public class Bookings{
       return null;
     }
     
+    public String[] InvoiceContent(String bookingReference) {
+      VenueBooking booking = bookingOperations.getBooking(bookingReference);
+
+      if (booking != null) {
+        String[] invoiceContent = new String[5];
+        invoiceContent[0] = booking.getCateringPrice();
+        invoiceContent[1] = booking.getCateringType();
+        invoiceContent[2] = booking.getVenueCode();
+
+        return invoiceContent;
+      }
+
+      return new String[0];
+    }
 
     // Helper method to find VenueBooking object by venue code
     private VenueBooking findVenueBooking(String venueCode) {
