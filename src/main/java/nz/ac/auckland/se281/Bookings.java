@@ -104,13 +104,16 @@ public class Bookings{
       VenueBooking booking = bookingOperations.getBooking(bookingReference);
 
       if (booking != null) {
-        String[] invoiceContent = new String[6];
+        String[] invoiceContent = new String[9];
         invoiceContent[0] = booking.getCateringPrice();
         invoiceContent[1] = booking.getCateringService();
         invoiceContent[2] = booking.getVenueCode();
         invoiceContent[3] = booking.getMusicPrice();
         invoiceContent[4] = booking.getFloralPrice();
         invoiceContent[5] = booking.getFloralService();
+        invoiceContent[6] = booking.attendees.get(booking.bookingReferences.indexOf(bookingReference));
+        invoiceContent[7] = booking.getBookedDates().get(booking.bookingReferences.indexOf(bookingReference));
+        invoiceContent[8] = booking.customerEmails.get(booking.bookingReferences.indexOf(bookingReference));
 
         return invoiceContent;
       }

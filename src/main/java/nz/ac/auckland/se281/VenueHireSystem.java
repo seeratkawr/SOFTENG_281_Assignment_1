@@ -257,6 +257,12 @@ public class VenueHireSystem {
 
   public void viewInvoice(String bookingReference) {
     String[] invoiceContent = bookings.InvoiceContent(bookingReference);
+    String venueCode = "";
+    String venueFee = "0";
+    String attendees = "0";
+    String partyDate = "";
+    String venueName = "";
+    String customerEmail = "";
     String musicPrice = "0";
     String cateringPrice = "0";
     String cateringTypeName = "";
@@ -268,9 +274,19 @@ public class VenueHireSystem {
       MessageCli.VIEW_INVOICE_BOOKING_NOT_FOUND.printMessage(bookingReference);
       return;
     } else {
-      String venueCode = invoiceContent[2];
-      String venueFee = venueHireFee.get(venueCodes.indexOf(venueCode));
+      venueCode = invoiceContent[2];
+      attendees = invoiceContent[6];
+      partyDate = invoiceContent[7];
+      venueName = venueNames.get(venueCodes.indexOf(venueCode));
+      venueFee = venueHireFee.get(venueCodes.indexOf(venueCode));
+      customerEmail = invoiceContent[8];
       totalPrice += Integer.parseInt(venueFee);
+
+      MessageCli.INVOICE_CONTENT_TOP_HALF.printMessage(
+        bookingReference, customerEmail, partyDate, partyDate, attendees, venueName
+      );
+
+      MessageCli.INVOICE_CONTENT_VENUE_FEE.printMessage(venueFee);
 
       if (bookings.getCateringService(bookingReference) != null) {
         cateringPrice = invoiceContent[0];
@@ -291,9 +307,8 @@ public class VenueHireSystem {
         MessageCli.INVOICE_CONTENT_FLORAL_ENTRY.printMessage(floralTypeName, floralPrice);
         totalPrice += Integer.parseInt(floralPrice);
       }
-
-      String total = String.valueOf(totalPrice);
-      MessageCli.INVOICE_CONTENT_BOTTOM_HALF.printMessage(total);
+      
+      MessageCli.INVOICE_CONTENT_BOTTOM_HALF.printMessage(String.valueOf(totalPrice));
     }
 }
 
