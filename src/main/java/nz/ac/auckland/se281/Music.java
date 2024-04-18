@@ -5,7 +5,6 @@ public class Music extends Services {
         super(bookingOperations);
     }
 
-    @Override
     public void addService(String bookingReference) {
         Bookings.VenueBooking booking = bookingOperations.getBooking(bookingReference);
 

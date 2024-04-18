@@ -15,6 +15,7 @@ public class VenueHireSystem {
   ArrayList<String> venueCapacity = new ArrayList<>();
   ArrayList<String> venueHireFee = new ArrayList<>();
   Bookings bookings;
+  Services services;
 
   String SystemDate = null;
   

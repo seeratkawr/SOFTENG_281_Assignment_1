@@ -4,12 +4,11 @@ import nz.ac.auckland.se281.Types.FloralType;
 
 public class Floral extends Services {
     private FloralType floralType;
-    
+
     public Floral(Bookings.BookingOperations bookingOperations) {
         super(bookingOperations);
     }
 
-    @Override
     public void addService(String bookingReference) {
         Bookings.VenueBooking booking = bookingOperations.getBooking(bookingReference);
 
@@ -21,4 +20,8 @@ public class Floral extends Services {
           booking.setFloralPrice(String.valueOf(floralPrice));
         }
     }
+
+    public void setFloralType(FloralType floralType) {
+      this.floralType = floralType;
+  }
 }

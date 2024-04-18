@@ -8,7 +8,6 @@ public class Catering extends Services {
         super(bookingOperations);
     }
 
-    @Override
     public void addService(String bookingReference) {
         Bookings.VenueBooking booking = bookingOperations.getBooking(bookingReference);
 
@@ -20,4 +19,8 @@ public class Catering extends Services {
           booking.setCateringPrice(String.valueOf(cateringPrice));
         }
     }
+
+    public void setCateringType(CateringType cateringType) {
+      this.cateringType = cateringType;
+  }
 }

@@ -5,7 +5,6 @@ import java.util.List;
 public class Bookings{
     protected List<VenueBooking> venueBookings;
     protected BookingOperations bookingOperations;
-    //protected BookingServices bookingServices;
     protected Services cateringService;
     protected Services musicService;
     protected Services floralService;
@@ -14,7 +13,6 @@ public class Bookings{
     public Bookings() {
       this.venueBookings = new ArrayList<>();
       this.bookingOperations = new BookingOperations();
-      //this.bookingServices = new BookingServices(this.bookingOperations);
       this.cateringService = new Catering(bookingOperations);
       this.musicService = new Music(bookingOperations);
       this.floralService = new Floral(bookingOperations);
@@ -58,9 +56,19 @@ public class Bookings{
       return bookingOperations.getBooking(bookingReference);
     }
 
-    /*public void addServiceCatering (String bookingReference, Types.CateringType cateringType) {
-      bookingServices.addServiceCatering(bookingReference, cateringType);
-    }*/
+    public void addServiceCatering(String bookingReference, Types.CateringType cateringType) {
+      ((Catering) cateringService).setCateringType(cateringType);
+      cateringService.addService(bookingReference);
+    }
+  
+    public void addServiceMusic(String bookingReference) {
+      musicService.addService(bookingReference);
+    }
+  
+    public void addServiceFloral(String bookingReference, Types.FloralType floralType) {
+      ((Floral) floralService).setFloralType(floralType);
+      floralService.addService(bookingReference);
+    }
 
     public String getCateringService (String bookingReference) {
       VenueBooking booking = bookingOperations.getBooking(bookingReference);
@@ -82,10 +90,6 @@ public class Bookings{
       return null;
     }
 
-    /*public void addServiceMusic (String bookingReference) {
-      bookingServices.addServiceMusic(bookingReference);
-    }*/
-
     public String getMusicService (String bookingReference) {
       VenueBooking booking = bookingOperations.getBooking(bookingReference);
       
@@ -105,10 +109,6 @@ public class Bookings{
 
       return null;
     }
-
-    /*public void addServiceFloral (String bookingReference, Types.FloralType floralType) {
-      bookingServices.addServiceFloral(bookingReference, floralType);
-    }*/
 
     public String getFloralService (String bookingReference) {
       VenueBooking booking = bookingOperations.getBooking(bookingReference);
@@ -363,48 +363,4 @@ public class Bookings{
       return null;
     }
   }
-
-  /*protected class BookingServices {
-    BookingOperations bookingOperations;
-
-    public BookingServices(BookingOperations bookingOperations) {
-      this.bookingOperations = bookingOperations;
-    }
-
-    public void addServiceCatering (String bookingReference, Types.CateringType cateringType) {
-      VenueBooking booking = bookingOperations.getBooking(bookingReference);
-
-      if (booking != null) {
-        String cateringService = cateringType.getName();
-        int cateringPrice = cateringType.getCostPerPerson() * Integer.parseInt(booking.attendees.get(booking.bookingReferences.indexOf(bookingReference)));
-
-        booking.setCateringType(cateringService);
-        booking.setCateringPrice(String.valueOf(cateringPrice));
-      }
-    }
-
-    public void addServiceMusic (String bookingReference) {
-      VenueBooking booking = bookingOperations.getBooking(bookingReference);
-
-      if (booking != null) {
-        String musicService = "Music";
-        int musicPrice = 500;
-
-        booking.setMusicService(musicService);
-        booking.setMusicPrice(String.valueOf(musicPrice));
-      }
-    }
-
-    public void addServiceFloral (String bookingReference, Types.FloralType floralType) {
-      VenueBooking booking = bookingOperations.getBooking(bookingReference);
-
-      if(booking != null) {
-        String floralService = floralType.getName();
-        int floralPrice = floralType.getCost();
-
-        booking.setFloralType(floralService);
-        booking.setFloralPrice(String.valueOf(floralPrice));
-      }
-    }
-  }*/
 }
