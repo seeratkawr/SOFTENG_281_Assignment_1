@@ -4,6 +4,7 @@ public class BookingServices extends Bookings {
   BookingOperations bookingOperations;
 
   public BookingServices(BookingOperations bookingOperations) {
+    super();
     this.bookingOperations = bookingOperations;
   }
 

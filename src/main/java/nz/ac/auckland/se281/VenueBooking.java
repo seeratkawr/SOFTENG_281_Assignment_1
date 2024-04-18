@@ -16,6 +16,7 @@ public class VenueBooking extends Bookings {
   protected String floralPrice;
 
   public VenueBooking(String venueCode) {
+    super();
     this.venueCode = venueCode;
     this.bookedDates = new ArrayList<>();
     this.customerEmails = new ArrayList<>();

@@ -3,6 +3,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class BookingOperations extends Bookings {
+  public BookingOperations() {
+    super();
+  }
+  
   public void makeBooking(String[] extendedOptions, List<VenueBooking> venueBookings) {
     String venueCode = extendedOptions[0];
     String bookingDate = extendedOptions[1];
