@@ -7,6 +7,7 @@ import nz.ac.auckland.se281.Types.CateringType;
 import nz.ac.auckland.se281.Types.FloralType;
 
 
+
 public class VenueHireSystem {
   // Created 4 new arraylists to store the venue name, code, capacity, and hire fee
   ArrayList<String> venueNames = new ArrayList<>();
