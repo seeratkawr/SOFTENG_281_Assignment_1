@@ -3,24 +3,29 @@ package nz.ac.auckland.se281;
 import nz.ac.auckland.se281.Types.CateringType;
 
 public class Catering extends Services {
-    private CateringType cateringType;
-    public Catering (Bookings.BookingOperations bookingOperations) {
-        super(bookingOperations);
-    }
+  //This class extends the Services 'parent' class
+  private CateringType cateringType;
 
-    public void addService(String bookingReference) {
-        Bookings.VenueBooking booking = bookingOperations.getBooking(bookingReference);
+  //Constructor for Catering class
+  public Catering (Bookings.BookingOperations bookingOperations) {
+    super(bookingOperations);
+  }
 
-        if (booking != null) {
-          String cateringService = cateringType.getName();
-          int cateringPrice = cateringType.getCostPerPerson() * Integer.parseInt(booking.attendees.get(booking.bookingReferences.indexOf(bookingReference)));
+  //Method that adds a catering service to a booking
+  public void addService(String bookingReference) {
+    Bookings.VenueBooking booking = bookingOperations.getBooking(bookingReference);
+
+    if (booking != null) {
+      String cateringService = cateringType.getName();
+      int cateringPrice = cateringType.getCostPerPerson() * Integer.parseInt(booking.attendees.get(booking.bookingReferences.indexOf(bookingReference)));
   
-          booking.setCateringType(cateringService);
-          booking.setCateringPrice(String.valueOf(cateringPrice));
-        }
+      booking.setCateringType(cateringService);
+      booking.setCateringPrice(String.valueOf(cateringPrice));
     }
+  }
 
-    public void setCateringType(CateringType cateringType) {
-      this.cateringType = cateringType;
+  //Method that sets the catering type
+  public void setCateringType(CateringType cateringType) {
+    this.cateringType = cateringType;
   }
 }
