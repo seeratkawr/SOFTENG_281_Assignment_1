@@ -1,9 +1,9 @@
 package nz.ac.auckland.se281;
 
-public class Music extends Services {
+public class MusicService extends Services {
   // This class extends the Services 'parent' class
   // Constructor for Music class
-  public Music(Bookings.BookingOperations bookingOperations) {
+  public MusicService(Bookings.BookingOperations bookingOperations) {
     super(bookingOperations);
   }
 

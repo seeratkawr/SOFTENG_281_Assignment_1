@@ -2,7 +2,7 @@ package nz.ac.auckland.se281;
 
 public abstract class Services {
   // This is an abstract class that is extended by Catering, Floral, and Music classes
-  Bookings.BookingOperations bookingOperations;
+  protected Bookings.BookingOperations bookingOperations;
 
   // Constructor for Services class
   public Services(Bookings.BookingOperations bookingOperations) {

@@ -2,12 +2,12 @@ package nz.ac.auckland.se281;
 
 import nz.ac.auckland.se281.Types.CateringType;
 
-public class Catering extends Services {
+public class CateringService extends Services {
   // This class extends the Services 'parent' class
   private CateringType cateringType;
 
   // Constructor for Catering class
-  public Catering(Bookings.BookingOperations bookingOperations) {
+  public CateringService(Bookings.BookingOperations bookingOperations) {
     super(bookingOperations);
   }
 

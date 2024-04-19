@@ -2,12 +2,12 @@ package nz.ac.auckland.se281;
 
 import nz.ac.auckland.se281.Types.FloralType;
 
-public class Floral extends Services {
+public class FloralService extends Services {
   // This class extends the Services 'parent' class
   private FloralType floralType;
 
   // Constructor for Floral class
-  public Floral(Bookings.BookingOperations bookingOperations) {
+  public FloralService(Bookings.BookingOperations bookingOperations) {
     super(bookingOperations);
   }
 

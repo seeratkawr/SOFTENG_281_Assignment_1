@@ -15,9 +15,9 @@ public class Bookings {
   public Bookings() {
     this.venueBookings = new ArrayList<>();
     this.bookingOperations = new BookingOperations();
-    this.cateringService = new Catering(bookingOperations);
-    this.musicService = new Music(bookingOperations);
-    this.floralService = new Floral(bookingOperations);
+    this.cateringService = new CateringService(bookingOperations);
+    this.musicService = new MusicService(bookingOperations);
+    this.floralService = new FloralService(bookingOperations);
   }
 
   // Calls the makeBooking method in BookingOperations
@@ -72,7 +72,7 @@ public class Bookings {
 
   // Calls the Catering addService method, from the abstract Services class
   public void addServiceCatering(String bookingReference, Types.CateringType cateringType) {
-    ((Catering) cateringService).setCateringType(cateringType);
+    ((CateringService) cateringService).setCateringType(cateringType);
     cateringService.addService(bookingReference);
   }
 
@@ -83,7 +83,7 @@ public class Bookings {
 
   // Calls the Floral addService method, from the abstract Service class
   public void addServiceFloral(String bookingReference, Types.FloralType floralType) {
-    ((Floral) floralService).setFloralType(floralType);
+    ((FloralService) floralService).setFloralType(floralType);
     floralService.addService(bookingReference);
   }
 

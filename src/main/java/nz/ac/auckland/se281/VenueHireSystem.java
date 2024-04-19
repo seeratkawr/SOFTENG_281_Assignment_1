@@ -13,7 +13,7 @@ public class VenueHireSystem {
   private ArrayList<String> venueHireFee = new ArrayList<>();
   private Bookings bookings;
 
-  String SystemDate = null;
+  private String systemDate = null;
 
   public VenueHireSystem() {
     bookings = new Bookings();
@@ -50,10 +50,10 @@ public class VenueHireSystem {
       String capacity = venueCapacity.get(i);
       String hireFee = venueHireFee.get(i);
 
-      if (SystemDate == null) {
+      if (systemDate == null) {
         MessageCli.VENUE_ENTRY.printMessage(venue, code, capacity, hireFee);
       } else {
-        String nextAvailable = bookings.getNextAvailableDate(code, SystemDate);
+        String nextAvailable = bookings.getNextAvailableDate(code, systemDate);
 
         // Prints the venues
         MessageCli.VENUE_ENTRY.printMessage(venue, code, capacity, hireFee, nextAvailable);
@@ -127,24 +127,24 @@ public class VenueHireSystem {
 
   public void setSystemDate(String dateInput) {
     // Sets the system date to the input
-    SystemDate = dateInput;
+    systemDate = dateInput;
     // Prints the date set successfully
     MessageCli.DATE_SET.printMessage(dateInput);
   }
 
   public void printSystemDate() {
-    if (SystemDate == null) {
+    if (systemDate == null) {
       // If the system date is not set, print message
       MessageCli.CURRENT_DATE.printMessage("not set");
     } else {
       // If the system date is set, print the date
-      MessageCli.CURRENT_DATE.printMessage(SystemDate);
+      MessageCli.CURRENT_DATE.printMessage(systemDate);
     }
   }
 
   public void makeBooking(String[] options) {
     String bookingReference = BookingReferenceGenerator.generateBookingReference();
-    if (SystemDate == null) {
+    if (systemDate == null) {
       // System date must be set to make a booking, if not print message
       MessageCli.BOOKING_NOT_MADE_DATE_NOT_SET.printMessage();
     } else if (venueNames.isEmpty()) {
@@ -166,8 +166,8 @@ public class VenueHireSystem {
         // If the venueCode inputted is in the system
         if (options[0].equals(venueCodes.get(i))) {
           // If the date inputted is before the system date, print error message
-          if (options[1].compareTo(SystemDate) < 0) {
-            MessageCli.BOOKING_NOT_MADE_PAST_DATE.printMessage(options[1], SystemDate);
+          if (options[1].compareTo(systemDate) < 0) {
+            MessageCli.BOOKING_NOT_MADE_PAST_DATE.printMessage(options[1], systemDate);
             return;
             // If the capacity inputted is less than the minimum capacity, adjust the capacity to
             // the minimum capacity and print a message
@@ -312,7 +312,7 @@ public class VenueHireSystem {
       totalPrice += Integer.parseInt(venueFee);
 
       MessageCli.INVOICE_CONTENT_TOP_HALF.printMessage(
-          bookingReference, customerEmail, SystemDate, partyDate, attendees, venueName);
+          bookingReference, customerEmail, systemDate, partyDate, attendees, venueName);
 
       MessageCli.INVOICE_CONTENT_VENUE_FEE.printMessage(venueFee);
 
