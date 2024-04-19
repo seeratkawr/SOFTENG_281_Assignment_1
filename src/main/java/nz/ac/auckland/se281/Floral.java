@@ -15,6 +15,7 @@ public class Floral extends Services {
   public void addService(String bookingReference) {
     Bookings.VenueBooking booking = bookingOperations.getBooking(bookingReference);
 
+    // If the booking is found, set the floral service and price
     if (booking != null) {
       String floralService = floralType.getName();
       int floralPrice = floralType.getCost();

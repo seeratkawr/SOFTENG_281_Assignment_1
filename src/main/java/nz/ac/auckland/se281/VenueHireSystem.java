@@ -7,16 +7,15 @@ import nz.ac.auckland.se281.Types.FloralType;
 
 public class VenueHireSystem {
   // Created 4 new arraylists to store the venue name, code, capacity, and hire fee
-  ArrayList<String> venueNames = new ArrayList<>();
-  ArrayList<String> venueCodes = new ArrayList<>();
-  ArrayList<String> venueCapacity = new ArrayList<>();
-  ArrayList<String> venueHireFee = new ArrayList<>();
-  Bookings bookings;
-  Services services;
+  private ArrayList<String> venueNames = new ArrayList<>();
+  private ArrayList<String> venueCodes = new ArrayList<>();
+  private ArrayList<String> venueCapacity = new ArrayList<>();
+  private ArrayList<String> venueHireFee = new ArrayList<>();
+  private Bookings bookings;
 
   String SystemDate = null;
 
-  VenueHireSystem() {
+  public VenueHireSystem() {
     bookings = new Bookings();
   }
 
@@ -284,7 +283,7 @@ public class VenueHireSystem {
   }
 
   public void viewInvoice(String bookingReference) {
-    String[] invoiceContent = bookings.InvoiceContent(bookingReference);
+    String[] invoiceContent = bookings.invoiceContent(bookingReference);
     String venueCode = "";
     String venueFee = "0";
     String attendees = "0";

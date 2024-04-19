@@ -13,10 +13,13 @@ public class Catering extends Services {
 
   // Method that adds a catering service to a booking
   public void addService(String bookingReference) {
+    // Get the booking from the booking reference
     Bookings.VenueBooking booking = bookingOperations.getBooking(bookingReference);
 
+    // If the booking is found, set the catering service and price
     if (booking != null) {
       String cateringService = cateringType.getName();
+      // Catering price is found by multiplying the cost per person by the number of attendees
       int cateringPrice =
           cateringType.getCostPerPerson()
               * Integer.parseInt(

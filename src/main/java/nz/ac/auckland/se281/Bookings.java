@@ -163,7 +163,7 @@ public class Bookings {
   }
 
   // Gathers the invoice content for a booking
-  public String[] InvoiceContent(String bookingReference) {
+  public String[] invoiceContent(String bookingReference) {
     VenueBooking booking = bookingOperations.getBooking(bookingReference);
 
     // If the booking is not null return the invoice content, otherwise return an empty array

@@ -5,7 +5,7 @@ public abstract class Services {
   Bookings.BookingOperations bookingOperations;
 
   // Constructor for Services class
-  Services(Bookings.BookingOperations bookingOperations) {
+  public Services(Bookings.BookingOperations bookingOperations) {
     this.bookingOperations = bookingOperations;
   }
 
