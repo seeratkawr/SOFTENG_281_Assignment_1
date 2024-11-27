@@ -1,14 +1,19 @@
 # Venue Hire System
+The Venue Hire System is a Java-based application designed to streamline the process of booking venues for events. Users can book venues and add various services like catering, floral arrangements, and music to enhance their events.
 
-Venue hire systems can be complex. In this assignment, you will be asked to design and implement a simple venue hire system. The system will be able to store information about venues and their bookings.
+## Features
+* Book venues for specific dates
+* Add and manage catering services
+* Add and manage floral services
+* Add and manage music services
+* Comprehensive management of event types and dates
 
-The system you develop is one that the venue hire company will use to manage their venues and bookings. The system will be used by the venue hire company’s staff to:
+## Installation
+To run this project, ensure you have Java installed on you machine. Follow the steps below to set up and run the project:
+1. Clone the repository: `git clone https://github.com/your-username/venue-hire-system.git`
+2. Navigate to the project directory on your computer: `cd venue-hire-system`
+3. Compile the Java files: `javac *.java`
+4. Run the main application: `java Main`
 
-* View details of all the venues,
-* Create new venues,
-* View details of all the bookings for a venue,
-* Create new bookings for a venue,
-* Add catering, music, and floral services to a booking,
-* View the invoice for a booking.
-
-Due to the venue hire company’s limited budget (it’s apparently tough being a venue hire company), we will only design for them a terminal-driven interface. This means that the system will be controlled by a menu system that will be displayed on the terminal. The menu will allow the staff member to select from a list of commands. The staff member will be able to select a command by typing its code, and any arguments it expects. Some commands require additional options, which are prompted by the system one at a time. The system will then execute the appropriate action.
+## Usage
+After running the application, follow the on-screen prompts to book venues and manage services. The application provides a command-line interface for interaction.
